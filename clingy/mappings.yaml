@@ -1,0 +1,27 @@
+group_descriptions:
+  opencode: "Opencode configurations in `~/.config/opencode/`"
+  claude: "Claude adapted configurations in `~/.claude/`"
+
+configs:
+  # Opencode
+  - name: agent
+    source: ../agent/
+    target: ~/.config/opencode/agent/
+    group: opencode
+  - name: skill
+    source: ../skill/
+    target: ~/.config/opencode/skill/
+    group: opencode
+  - name: opencode
+    source: ../opencode.json
+    target: ~/.config/opencode/opencode.json
+    group: opencode
+  - name: themes
+    source: ../themes/
+    target: ~/.config/opencode/themes/
+    group: opencode
+  # Claude
+  - name: claude
+    source: ../agent/master-control-program.md
+    target: ~/.claude/CLAUDE.md
+    group: claude
