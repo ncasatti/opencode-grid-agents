@@ -1,6 +1,7 @@
 group_descriptions:
   opencode: "Opencode configurations in `~/.config/opencode/`"
   claude: "Claude adapted configurations in `~/.claude/`"
+  antigravity: "Antigravity IDE powered by Gemini"
 
 configs:
   # Opencode
@@ -25,3 +26,12 @@ configs:
     source: ../agent/master-control-program.md
     target: ~/.claude/CLAUDE.md
     group: claude
+  # Antigravity
+  - name: antigravity-mcp
+    source: ../agent/master-control-program.md
+    target: ~/.gemini/GEMINI.md
+    group: antigravity
+  - name: antigravity-skills
+    source: ../skill/
+    target: ~/.gemini/antigravity/skills/
+    group: antigravity
