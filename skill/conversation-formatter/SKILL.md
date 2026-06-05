@@ -1,3 +1,8 @@
+---
+name: conversation-formatter
+description: Estándar para formatear mensajes de texto y conversaciones.
+---
+
 # Skill: conversation-formatter
 
 ## Purpose
