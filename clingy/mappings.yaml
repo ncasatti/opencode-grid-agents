@@ -4,7 +4,9 @@ group_descriptions:
   antigravity: "Antigravity IDE powered by Gemini"
 
 configs:
-  # Opencode
+  ############
+  # Opencode #
+  ############
   - name: agent
     source: ../agent/
     target: ~/.config/opencode/agent/
@@ -21,7 +23,10 @@ configs:
     source: ../themes/
     target: ~/.config/opencode/themes/
     group: opencode
-  # Claude
+
+  ##########
+  # Claude #
+  ##########
   - name: claude
     source: ../agent/clu.md
     target: ~/.claude/CLAUDE.md
@@ -34,7 +39,19 @@ configs:
     source: ../agent/
     target: ~/.claude/agents/
     group: claude
-  # Antigravity
+  # Config
+  - name: claude-settings
+    source: ../configs/claude/settings.json
+    target: ~/.claude/settings.json
+    group: claude
+  - name: claude-statusline
+    source: ../configs/claude/statusline-command.sh
+    target: ~/.claude/statusline-command.sh
+    group: claude
+
+  ###############
+  # Antigravity #
+  ###############
   - name: antigravity-mcp
     source: ../agent/clu.md
     target: ~/.gemini/GEMINI.md
