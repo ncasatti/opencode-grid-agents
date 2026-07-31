@@ -43,9 +43,19 @@ The current workflow is documented in [docs/sdd-workflow.md](docs/sdd-workflow.m
 - `flow-router`: User-invoked router. Recommends which skill to invoke and routes code-intel queries between gbrain and codebase-memory-mcp. See [SKILLS.md](skill/flow-router/SKILLS.md), [TOOLS.md](skill/flow-router/TOOLS.md), [SYNC.md](skill/flow-router/SYNC.md).
 - `write-spec`: Synthesizes a spec from an ongoing conversation. Output: `docs/feats/{feat-name}/spec.md`. Interactive.
 - `write-testable-specs`: Reads `spec.md` and produces `testable-specs.md` (RFC 2119 + delta specs). Conditional — recommended by a 4-dimension heuristic in `write-spec`. Headless.
-- `write-design`: Produces `design.md` + ADRs in `docs/adr/`. Publishes ADRs to `codebase-memory-mcp`. Interactive.
+- `write-design`: Produces `design.md` + ADRs in `docs/adr/`. Publishes ADRs to `codebase-memory-mcp`. Interactive. Pulls in `codebase-design` and `domain-modeling` as lenses.
+- `write-tickets`: Decomposes the design into vertical-slice tickets. Output: `docs/feats/{feat-name}/tickets.md`. Headless.
 
-**In progress** (not yet migrated): tickets, implement, code-review, archive.
+### Architecture Skills (Matt Pocock set)
+
+User-invoked triggers and model-invoked lenses adopted from the engineering toolkit. Full catalog in [skill/flow-router/SKILLS.md](skill/flow-router/SKILLS.md).
+
+- `codebase-design`: Vocabulary for deep modules — module, interface, seam, adapter, depth, leverage, locality. Model-invoked lens.
+- `improve-codebase-architecture`: User-invoked. Scans a codebase for deepening opportunities, presents them as an HTML report in `$TMPDIR`, then drives the chosen candidate through a grilling loop.
+- `grill-with-docs`: User-invoked. Relentless interview that sharpens an idea and writes `docs/CONTEXT.md` / `docs/adr/` inline as terms and decisions crystallise.
+- `domain-modeling`: Model-invoked. Maintains `docs/CONTEXT.md` (glossary) and offers ADRs (hybrid format: status frontmatter + minimal body).
+
+**In progress** (not yet migrated): `sdd-apply`, `sdd-verify`, `sdd-archive`. Future migration targets (in `to-review/mattpocock-skills/`): `implement`, `code-review`, `triage`, `diagnosing-bugs`, `wayfinder`.
 
 ### General Skills
 - `agent-authoring`: Guide for creating and maintaining Claude Code agents.
