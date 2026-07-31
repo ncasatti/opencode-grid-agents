@@ -36,14 +36,16 @@ The following programs are currently in legacy mode or reserved for review purpo
 
 The passive abilities (pure knowledge) loaded into the system as of version 1.4:
 
-### SDD Pipeline (System Design Document)
-- `sdd-propose`: Feat request, writes prd.md.
-- `sdd-specs`: Takes prd.md to specs.md.
-- `sdd-design`: Creates design.md.
-- `sdd-tasks`: Create Vertical Slices tasks.
-- `sdd-apply`: Executes all tasks.
-- `sdd-verify`: Loads docs and reviews code.
-- `sdd-archive`: Move feat folder to .archive.
+### SDD Pipeline (Workflow)
+
+The current workflow is documented in [docs/sdd-workflow.md](docs/sdd-workflow.md). Quick index:
+
+- `flow-router`: User-invoked router. Recommends which skill to invoke and routes code-intel queries between gbrain and codebase-memory-mcp. See [SKILLS.md](skill/flow-router/SKILLS.md), [TOOLS.md](skill/flow-router/TOOLS.md), [SYNC.md](skill/flow-router/SYNC.md).
+- `write-spec`: Synthesizes a spec from an ongoing conversation. Output: `docs/feats/{feat-name}/spec.md`. Interactive.
+- `write-testable-specs`: Reads `spec.md` and produces `testable-specs.md` (RFC 2119 + delta specs). Conditional — recommended by a 4-dimension heuristic in `write-spec`. Headless.
+- `write-design`: Produces `design.md` + ADRs in `docs/adr/`. Publishes ADRs to `codebase-memory-mcp`. Interactive.
+
+**In progress** (not yet migrated): tickets, implement, code-review, archive.
 
 ### General Skills
 - `agent-authoring`: Guide for creating and maintaining Claude Code agents.
