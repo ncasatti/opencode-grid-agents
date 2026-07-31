@@ -1,6 +1,6 @@
 ---
 name: changelog-format
-description: Estándar 'Keep a Changelog' v1.1.
+description: CHANGELOG file standard following 'Keep a Changelog' v1.1 — Added/Changed/Deprecated/Removed/Fixed/Security categories, the Unreleased section, and release tagging. Use when creating or updating a CHANGELOG, recording changes, writing release notes, or before tagging a release.
 compatibility: Claude Code, OpenCode
 metadata:
   author: ncasatti
@@ -54,3 +54,7 @@ All changes must be grouped under `## [Unreleased]` until tagged.
 - After completing a feature → Add to `### Added`
 - After fixing a bug → Add to `### Fixed`
 - Before tagging a release → Move from `[Unreleased]` to `[version]`
+
+## Linking (per pro-docs)
+
+`CHANGELOG.md` is a root sentinel file (`UPPERCASE`, repo root) — not part of the modular `docs/` tree. This skill defines only its content format, never the doc structure. When a CHANGELOG exists, ensure the main `README.md` index links to it (see the `pro-docs` skill).

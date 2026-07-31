@@ -7,27 +7,31 @@ configs:
   ############
   # Opencode #
   ############
-  - name: agent
+  - name: opencode-agents
     source: ../agent/
     target: ~/.config/opencode/agent/
     group: opencode
-  - name: skill
+  - name: opencode-skills
     source: ../skill/
     target: ~/.config/opencode/skill/
     group: opencode
-  - name: opencode
-    source: ../opencode.json
-    target: ~/.config/opencode/opencode.json
-    group: opencode
-  - name: themes
+  - name: opencode-themes
     source: ../themes/
     target: ~/.config/opencode/themes/
+    group: opencode
+  - name: opencode-config
+    source: ../configs/opencode/opencode.json
+    target: ~/.config/opencode/opencode.json
+    group: opencode
+  - name: opencode-tui
+    source: ../configs/opencode/tui.json
+    target: ~/.config/opencode/tui.json
     group: opencode
 
   ##########
   # Claude #
   ##########
-  - name: claude
+  - name: claude-main-agent
     source: ../agent/clu.md
     target: ~/.claude/CLAUDE.md
     group: claude

@@ -1,12 +1,12 @@
 ---
 name: html-generator
-description: Builds standalone HTML documentation pages styled with the "Brutalist Command" terminal aesthetic. The agent writes complete, self-contained HTML directly — no build step, no runtime, no dependencies beyond the CDN-loaded Tailwind and Space Grotesk references inside each file. Three page archetypes are supported `landing` (project entrypoint / readme), `reference` (API or CLI docs), and `architecture` (system specs / ADRs). Use when the User asks to render documentation as HTML, generate a static doc site, produce a styled documentation portal, or create a single-page HTML doc with the Brutalist Command theme.
+description: Renders an interactive HTML mirror of the project's Markdown documentation (the pro-docs README + docs/ tree) into docs/html/, styled with the "Brutalist Command" terminal aesthetic. Self-contained pages, no build step. The Markdown is the source of truth; this skill only mirrors it. Use when rendering or publishing docs as an interactive web site, mirroring the README and docs to HTML, generating a GitHub Pages doc site, or producing a styled documentation portal.
 version: 2.0.0
 ---
 
 # Static HTML Generator
 
-This skill is a design system, not a build tool. The agent is the builder: it writes `.html` files directly using the patterns defined in `theme/`. There is no script, no `npm install`, no runtime — every output file is a self-contained, browser-ready HTML document that loads its CSS via the Tailwind CDN.
+This skill is a **rendering layer**, not a standalone doc system. It produces an interactive HTML **mirror** of the Markdown documentation authored with `pro-docs` — the Markdown (`README.md` + `docs/**/*.md`) is the single source of truth; the HTML is derived from it, never the reverse. The agent is the builder: it writes self-contained `.html` files directly using the patterns defined in `theme/`. There is no script, no `npm install`, no runtime — every output loads its CSS via the Tailwind CDN.
 
 ## Theme Path (Reference Only)
 
@@ -19,18 +19,15 @@ The theme lives at a fixed absolute path. The agent reads from it; it never copi
 
 ## Standard Project Layout (Mandatory)
 
-Every project consuming this skill adopts:
+The HTML mirror lives entirely under `docs/html/`, mirroring the Markdown tree one-to-one — same slug, same position, `.html` instead of `.md`:
 
 ```
-docs/
-  index.html          ← landing page (readme archetype)
-  pages/              ← secondary pages
-    reference.html    ← reference archetype
-    architecture.html ← architecture archetype
-    <other>.html
+README.md              →  docs/html/index.html          (landing)
+docs/<slug>.md         →  docs/html/<slug>.html          (archetype by Diátaxis mode)
+docs/<dir>/<slug>.md   →  docs/html/<dir>/<slug>.html    (tree preserved)
 ```
 
-Every output is a complete `.html` file. There is no separate Markdown source directory and no build artifact directory — the HTML *is* the source. Commit the whole `docs/` tree to the repo. This layout is compatible with GitHub Pages (`Settings → Pages → Source: /docs`).
+The Markdown under `docs/` is the source and is **never touched** by this skill. The HTML under `docs/html/` is the derived mirror — regenerate it when the Markdown changes (the Markdown wins). Commit the `docs/html/` tree to the repo. For GitHub Pages, set `Settings → Pages → Source: /docs/html`.
 
 ## Quick Start
 
@@ -44,36 +41,47 @@ Every output is a complete `.html` file. There is no separate Markdown source di
 
 The agent gathers requirements before producing any file. It generates content dynamically from the conversation; pre-existing HTML files are honored when present.
 
-### Phase 1 — Content Audit
+### Phase 1 — Mirror Audit
 
-Resolve all five before writing any file:
+Discover the source structure, then mirror it. Resolve before writing any file:
 
-1. Does `docs/html/` already contain rendered `.html` files? If yes → offer to use them as-is, regenerate from scratch, or extend them.
-2. What is the subject? (project, tool, topic being documented)
-3. What pages are needed? (e.g., landing + reference, or landing + architecture + reference)
-4. Which archetype fits each page? (`landing`, `reference`, `architecture`)
-5. Any specific sections, content, or constraints to include or exclude?
+1. **Read the source.** Enumerate the `pro-docs` Markdown: `README.md` (the index) and every `docs/**/*.md`. This set defines the pages to render — do not invent pages the Markdown doesn't have.
+2. **Check the mirror.** Does `docs/html/` already hold rendered `.html`? If yes → offer to regenerate (re-sync with the Markdown) or extend.
+3. **Map each source file to an archetype** via its Diátaxis mode (see the Archetype Selection Map). `README.md` → `index.html` (`landing`).
+4. **Note constraints.** Any pages to exclude from the mirror, or extra interactive sections to add.
+
+If no `pro-docs` Markdown exists yet, say so and recommend authoring it first (with the `pro-docs` skill) — the mirror has nothing to reflect without a source.
 
 ### Phase 2 — Execution
 
-1. Create `docs/` and `docs/pages/` if missing.
-2. For each requested page:
+1. Create `docs/html/` (mirroring any subdirectories of `docs/`) if missing.
+2. For each source page (from Phase 1):
    - Open the matching `theme/examples/<archetype>.html` as a structural reference.
    - Open `theme/COMPONENTS.md` to copy the exact snippet patterns needed.
    - Open `theme/DESIGN.md` for any color, typography, or spacing decision not covered by a snippet.
-   - Write the complete `.html` file directly. No external CSS, no JS bundles, no build step. Tailwind and Space Grotesk are loaded inline via CDN inside the file.
-3. Cross-link the pages: every secondary page links back to `../index.html` ("Return to Entry Point") and the landing page links forward to each secondary page.
-4. Report output paths to the User.
+   - Render the Markdown content into the complete `.html` file at its mirror path (`docs/html/<slug>.html`). No external CSS, no JS bundles, no build step. Tailwind and Space Grotesk are loaded inline via CDN inside the file.
+3. **Mirror the links:** `index.html` reproduces the README's navigation index (one entry per page); every other page links back to `index.html` ("Return to Entry Point"); cross-links between pages match the Markdown's cross-links.
+4. **Register in the index:** ensure the source `README.md` links to `docs/html/index.html` as the interactive docs (per the `pro-docs` skill).
+5. Report output paths to the User.
 
 ### Sample Discovery Dialogue
 
-> **Agent:** I do not find any `.html` files in `docs/`. What are we documenting? Give me the subject and a rough list of pages.
-> **User:** My CLI tool `clingy` — landing page and a command reference.
-> **Agent:** Two pages. `docs/index.html` as the landing using the `landing` archetype, and `docs/pages/reference.html` using the `reference` archetype. Sections I'd include on the landing: prerequisites, install sequence, navigation cards. On the reference: command flags, exit codes, and a contracts strip. Confirm the sections or add what is missing.
-> **User:** Include installation, quickstart, and all the flags. Go.
-> **Agent:** Writing `docs/index.html` with the cyan-headline hero, prerequisites card, three-step install grid, and four navigation tiles — then `docs/pages/reference.html` with the side-bordered hero, flag list, and three contract cards. Standalone HTML, no build step.
+> **Agent:** I see the source docs: `README.md`, `docs/installation.md`, and `docs/reference.md`. I'll mirror them into `docs/html/`. Confirm, or tell me which to skip.
+> **User:** All three. Go.
+> **Agent:** Writing `docs/html/index.html` (mirror of `README.md`, `landing` archetype) with the cyan-headline hero and navigation tiles; `docs/html/installation.html` (mirror of `docs/installation.md`, `landing`); and `docs/html/reference.html` (mirror of `docs/reference.md`, `reference` archetype) with the side-bordered hero and flag list. Each secondary page links back to `index.html`, and I'll add the `docs/html/index.html` link to the README. Standalone HTML, no build step.
 
 ## Archetype Selection Map
+
+Pick each page's archetype from the Diátaxis mode of its source Markdown:
+
+| Source doc (Diátaxis mode) | Archetype |
+|---|---|
+| `README.md` / index / overview | `landing` |
+| Reference (`docs/reference.md`, `docs/api.md`, `docs/keys/*`) | `reference` |
+| Explanation (`docs/architecture.md`, `docs/design.md`) | `architecture` |
+| How-to / Tutorial (`docs/getting-started.md`, `docs/troubleshooting.md`) | `landing` |
+
+Layout signatures per archetype:
 
 | Archetype | Use for | Layout signature | Reference file |
 |---|---|---|---|
@@ -105,6 +113,7 @@ Reference: `theme/DESIGN.md` for the full design system; `theme/COMPONENTS.md §
 
 ## Operational Constraints
 
+- **Mirror only.** Never create, edit, or delete the Markdown source (`README.md`, `docs/**/*.md`); this skill writes only under `docs/html/`. The Markdown is owned by `pro-docs`.
 - **Self-contained output.** Every `.html` file must work when opened directly in a browser with no companion files. CSS is loaded via the Tailwind CDN inside the file; fonts via Google Fonts; no local JS bundles.
 - **No build step.** Do not introduce `package.json`, `node_modules`, build scripts, or watchers.
 - **No frameworks.** No React, no Vue, no static-site generators. Plain HTML and Tailwind utility classes only.
