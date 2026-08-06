@@ -52,6 +52,10 @@ configs:
     source: ../configs/claude/statusline-command.sh
     target: ~/.claude/statusline-command.sh
     group: claude
+  - name: claude-mcp
+    source: ../configs/claude/mcp.json
+    target: ~/.claude/.mcp.json
+    group: claude
 
   ###############
   # Antigravity #

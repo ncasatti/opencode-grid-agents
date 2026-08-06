@@ -1,39 +1,55 @@
 {
-    "$schema": "https://opencode.ai/config.json",
-    "autoupdate": true,
-    "plugin": [
-        "opencode-anthropic-login-via-cli@latest",
-        "opencode-gemini-auth@latest"
-    ],
-    "mcp": {
-        "context7": {
-            "type": "remote",
-            "url": "https://mcp.context7.com/mcp",
-            "enabled": false
-        },
-        "engram": {
-            "command": [
-                "engram",
-                "mcp",
-                "--tools=agent"
-            ],
-            "enabled": true,
-            "type": "local"
-        },
-        "codebase-memory-mcp": {
-            "enabled": true,
-            "type": "local",
-            "command": [
-                "codebase-memory-mcp"
-            ]
-        }
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": true,
+  "plugin": [
+    "opencode-anthropic-login-via-cli@latest",
+    "opencode-gemini-auth@latest"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": false
     },
-    "agent": {
-        "build": {
-            "disable": true
-        },
-        "plan": {
-            "disable": true
-        }
+    "engram": {
+      "command": [
+        "engram",
+        "mcp",
+        "--tools=agent"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "codebase-memory-mcp": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "codebase-memory-mcp"
+      ]
+    },
+    "the-grid": {
+      "type": "local",
+      "command": [
+        "bun",
+        "run",
+        "--cwd",
+        "/home/flyn/.the-grid/systems/grid/packages/mcp",
+        "start"
+      ],
+      "environment": {
+        "VAULT_PATH": "/home/flyn/.local/share/the-grid",
+        "DB_PATH": "/home/flyn/.local/state/the-grid/.grid.db",
+        "MCP_ACTOR": "process:mcp"
+      },
+      "enabled": true
     }
+  },
+  "agent": {
+    "build": {
+      "disable": true
+    },
+    "plan": {
+      "disable": true
+    }
+  }
 }

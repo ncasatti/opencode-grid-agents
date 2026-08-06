@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "codebase-memory-mcp": {
+      "command": "/nix/store/w2yj6m2j9a8isn54hf52c7f4q0llx9q9-codebase-memory-mcp-0.8.1/bin/codebase-memory-mcp"
+    },
+    "the-grid": {
+      "command": "bun",
+      "args": [
+        "run",
+        "--cwd",
+        "/home/flyn/.the-grid/systems/grid/packages/mcp",
+        "start"
+      ],
+      "env": {
+        "VAULT_PATH": "/home/flyn/.local/share/the-grid",
+        "DB_PATH": "/home/flyn/.local/state/the-grid/.grid.db",
+        "MCP_ACTOR": "process:mcp"
+      }
+    }
+  }
+}
